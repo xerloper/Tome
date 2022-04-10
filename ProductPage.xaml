@@ -1,0 +1,78 @@
+﻿<Page x:Class="Tome.ProductPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Tome"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ProductPage">
+
+    <Page.Resources>
+        <local:ImageConverter x:Key="imageConverter"/>
+    </Page.Resources>
+    
+    
+    <Grid Grid.Row="1" Background="#FFFFFF">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="68"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="5*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="Поиск:" Margin="5 0"/>
+                <TextBox Name="findAgentsTextBox" Grid.Column="0" Margin="5" MouseEnter="findAgentsTextBox_MouseEnter" MouseLeave="findAgentsTextBox_MouseEnter" TextChanged="findAgentsTextBox_TextChanged"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1">
+                <TextBlock Text="Сортировка" Margin="5 0"/>
+                <ComboBox Margin="5" Name="sortAgentsComboBox" SelectionChanged="sortAgentsComboBox_SelectionChanged">
+                    <ComboBoxItem Content="Название (возрастание)"/>
+                    <ComboBoxItem Content="Название (убывание)"/>
+                    <ComboBoxItem Content="Цена (возрастание)"/>
+                    <ComboBoxItem Content="Цена (убывание)"/>
+                </ComboBox>
+            </StackPanel>
+        </Grid>
+        <WrapPanel Grid.Row="1" Name="main">
+            <ListView BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" x:Name="agentsListView" HorizontalAlignment="Center">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel HorizontalAlignment="Center"/>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="1" BorderBrush="Black">
+                            <StackPanel Height="300" Width="200">
+                                <Image Height="130" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5">
+                                    <Image.Source>
+                                        <Binding Path="Photo" Converter="{StaticResource imageConverter}">
+                                            <Binding.TargetNullValue>
+                                                <ImageSource>/Resources/picture.png</ImageSource>
+                                            </Binding.TargetNullValue>
+                                        </Binding>
+                                    </Image.Source>
+                                </Image>
+                                <StackPanel Grid.Column="1" Margin="5">
+                                    <TextBlock HorizontalAlignment="Center"><Run Text="{Binding MerchType.Title}"/>  "<Run Text="{Binding Title}"/>"</TextBlock>
+                                    <TextBlock HorizontalAlignment="Center" Text="{Binding Price, StringFormat={}{0:N2} руб.}"></TextBlock>
+                                </StackPanel>
+
+                                <Button Grid.Column="2" Margin="5" VerticalAlignment="Bottom" HorizontalAlignment="Center" Content="Редактировать" />
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </WrapPanel>
+        <DockPanel Grid.Row="2">
+            <Button Margin="3" HorizontalAlignment="Left" Content="Добавить товар"/>
+        </DockPanel>
+
+    </Grid>
+</Page>

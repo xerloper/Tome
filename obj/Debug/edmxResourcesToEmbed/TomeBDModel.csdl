@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TomeModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Collection">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Product" Relationship="Self.ProductCollection" FromRole="Collection" ToRole="Product" />
+  </EntityType>
+  <EntityType Name="MerchType">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Product" Relationship="Self.FK__Product__MerchTy__2A4B4B5E" FromRole="MerchType" ToRole="Product" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Photo" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="MerchTypeId" Type="Int32" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <NavigationProperty Name="MerchType" Relationship="Self.FK__Product__MerchTy__2A4B4B5E" FromRole="Product" ToRole="MerchType" />
+    <NavigationProperty Name="ProductSize" Relationship="Self.FK__ProductSi__Produ__2F10007B" FromRole="Product" ToRole="ProductSize" />
+    <NavigationProperty Name="Collection" Relationship="Self.ProductCollection" FromRole="Product" ToRole="Collection" />
+  </EntityType>
+  <EntityType Name="Size">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="ProductSize" Relationship="Self.FK__ProductSi__SizeI__300424B4" FromRole="Size" ToRole="ProductSize" />
+  </EntityType>
+  <EntityType Name="ProductSize">
+    <Key>
+      <PropertyRef Name="ProductID" />
+      <PropertyRef Name="SizeID" />
+      <PropertyRef Name="QuantityInStock" />
+    </Key>
+    <Property Name="ProductID" Type="Int32" Nullable="false" />
+    <Property Name="SizeID" Type="Int32" Nullable="false" />
+    <Property Name="QuantityInStock" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Product" Relationship="Self.FK__ProductSi__Produ__2F10007B" FromRole="ProductSize" ToRole="Product" />
+    <NavigationProperty Name="Size" Relationship="Self.FK__ProductSi__SizeI__300424B4" FromRole="ProductSize" ToRole="Size" />
+  </EntityType>
+  <Association Name="FK__Product__MerchTy__2A4B4B5E">
+    <End Role="MerchType" Type="Self.MerchType" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Product" Type="Self.Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MerchType">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="MerchTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ProductSi__Produ__2F10007B">
+    <End Role="Product" Type="Self.Product" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ProductSize" Type="Self.ProductSize" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ProductSize">
+        <PropertyRef Name="ProductID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ProductSi__SizeI__300424B4">
+    <End Role="Size" Type="Self.Size" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ProductSize" Type="Self.ProductSize" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Size">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ProductSize">
+        <PropertyRef Name="SizeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ProductCollection">
+    <End Role="Collection" Type="Self.Collection" Multiplicity="*" />
+    <End Role="Product" Type="Self.Product" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="TomeEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Collection" EntityType="Self.Collection" />
+    <EntitySet Name="MerchType" EntityType="Self.MerchType" />
+    <EntitySet Name="Product" EntityType="Self.Product" />
+    <EntitySet Name="Size" EntityType="Self.Size" />
+    <EntitySet Name="ProductSize" EntityType="Self.ProductSize" />
+    <AssociationSet Name="FK__Product__MerchTy__2A4B4B5E" Association="Self.FK__Product__MerchTy__2A4B4B5E">
+      <End Role="MerchType" EntitySet="MerchType" />
+      <End Role="Product" EntitySet="Product" />
+    </AssociationSet>
+    <AssociationSet Name="FK__ProductSi__Produ__2F10007B" Association="Self.FK__ProductSi__Produ__2F10007B">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="ProductSize" EntitySet="ProductSize" />
+    </AssociationSet>
+    <AssociationSet Name="FK__ProductSi__SizeI__300424B4" Association="Self.FK__ProductSi__SizeI__300424B4">
+      <End Role="Size" EntitySet="Size" />
+      <End Role="ProductSize" EntitySet="ProductSize" />
+    </AssociationSet>
+    <AssociationSet Name="ProductCollection" Association="Self.ProductCollection">
+      <End Role="Collection" EntitySet="Collection" />
+      <End Role="Product" EntitySet="Product" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

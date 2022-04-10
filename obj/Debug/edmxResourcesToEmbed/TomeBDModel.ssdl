@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Хранилище TomeModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Collection">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MerchType">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Photo" Type="nvarchar" MaxLength="1000" />
+    <Property Name="MerchTypeId" Type="int" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="250" />
+    <Property Name="Price" Type="money" Nullable="false" />
+  </EntityType>
+  <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "Tome.dbo.ProductCollection" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+  <EntityType Name="ProductCollection">
+    <Key>
+      <PropertyRef Name="ProductID" />
+      <PropertyRef Name="CollectionID" />
+    </Key>
+    <Property Name="ProductID" Type="int" Nullable="false" />
+    <Property Name="CollectionID" Type="int" Nullable="false" />
+  </EntityType>
+  <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "Tome.dbo.ProductSize" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+  <EntityType Name="ProductSize">
+    <Key>
+      <PropertyRef Name="ProductID" />
+      <PropertyRef Name="SizeID" />
+      <PropertyRef Name="QuantityInStock" />
+    </Key>
+    <Property Name="ProductID" Type="int" Nullable="false" />
+    <Property Name="SizeID" Type="int" Nullable="false" />
+    <Property Name="QuantityInStock" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Size">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="10" Nullable="false" />
+  </EntityType>
+  <Association Name="FK__Product__MerchTy__2A4B4B5E">
+    <End Role="MerchType" Type="Self.MerchType" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Product" Type="Self.Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MerchType">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="MerchTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ProductCo__Colle__2D27B809">
+    <End Role="Collection" Type="Self.Collection" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ProductCollection" Type="Self.ProductCollection" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Collection">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ProductCollection">
+        <PropertyRef Name="CollectionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ProductCo__Produ__2C3393D0">
+    <End Role="Product" Type="Self.Product" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ProductCollection" Type="Self.ProductCollection" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ProductCollection">
+        <PropertyRef Name="ProductID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ProductSi__Produ__2F10007B">
+    <End Role="Product" Type="Self.Product" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ProductSize" Type="Self.ProductSize" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ProductSize">
+        <PropertyRef Name="ProductID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ProductSi__SizeI__300424B4">
+    <End Role="Size" Type="Self.Size" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="ProductSize" Type="Self.ProductSize" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Size">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ProductSize">
+        <PropertyRef Name="SizeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Хранилище TomeModelContainer">
+    <EntitySet Name="Collection" EntityType="Self.Collection" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MerchType" EntityType="Self.MerchType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Size" EntityType="Self.Size" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProductCollection" EntityType="Self.ProductCollection" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [ProductCollection].[ProductID] AS [ProductID], 
+    [ProductCollection].[CollectionID] AS [CollectionID]
+    FROM [dbo].[ProductCollection] AS [ProductCollection]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="ProductSize" EntityType="Self.ProductSize" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [ProductSize].[ProductID] AS [ProductID], 
+    [ProductSize].[SizeID] AS [SizeID], 
+    [ProductSize].[QuantityInStock] AS [QuantityInStock]
+    FROM [dbo].[ProductSize] AS [ProductSize]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK__Product__MerchTy__2A4B4B5E" Association="Self.FK__Product__MerchTy__2A4B4B5E">
+      <End Role="MerchType" EntitySet="MerchType" />
+      <End Role="Product" EntitySet="Product" />
+    </AssociationSet>
+    <AssociationSet Name="FK__ProductCo__Colle__2D27B809" Association="Self.FK__ProductCo__Colle__2D27B809">
+      <End Role="Collection" EntitySet="Collection" />
+      <End Role="ProductCollection" EntitySet="ProductCollection" />
+    </AssociationSet>
+    <AssociationSet Name="FK__ProductCo__Produ__2C3393D0" Association="Self.FK__ProductCo__Produ__2C3393D0">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="ProductCollection" EntitySet="ProductCollection" />
+    </AssociationSet>
+    <AssociationSet Name="FK__ProductSi__Produ__2F10007B" Association="Self.FK__ProductSi__Produ__2F10007B">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="ProductSize" EntitySet="ProductSize" />
+    </AssociationSet>
+    <AssociationSet Name="FK__ProductSi__SizeI__300424B4" Association="Self.FK__ProductSi__SizeI__300424B4">
+      <End Role="Size" EntitySet="Size" />
+      <End Role="ProductSize" EntitySet="ProductSize" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
